@@ -1,0 +1,501 @@
+[
+    {
+        "name": "Google",
+        "description": "Google API",
+        "actions": [
+            {
+                "name": "New email",
+                "description": "A new mail received",
+                "handler": "action_google_mail_received", 
+                "parameters": [
+                ],
+                "results": [
+                    {
+                        "name": "email",
+                        "description": "Email adress of the sender",
+                        "type": "email"
+                    },
+                    {
+                        "name": "subject",
+                        "description": "Subject of the email",
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "description": "Body of the email",
+                        "type": "string"
+                    }
+                ]
+            },
+            {
+                "name": "New video",
+                "description": "A new youtube video is released",
+                "handler": "action_google_new_video",
+                "parameters": [
+                    {
+                        "name": "Channel",
+                        "description": "Channel ID",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "results": [
+                    {
+                        "name": "Video",
+                        "description": "Title of the video",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Channel",
+                        "description": "Title of the channel",
+                        "type": "string"
+                    },
+                    {
+                        "name": "ID",
+                        "description": "ID of the video",
+                        "type": "string"
+                    }
+                ]
+            }
+        ],
+        "reactions": [
+            {
+                "name": "Send email",
+                "description": "Send an email",
+                "handler": "reaction_google_mail_send", 
+                "parameters": [
+                    {
+                        "name": "Email",
+                        "description": "Email adress of the Receiver",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "Subject",
+                        "description": "Subject of the email",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "description": "Body of the email",
+                        "type": "string",
+                        "required": false
+                    }
+                ]
+            },
+            {
+                "name": "Like video",
+                "description": "Like a youtube video",
+                "handler": "reaction_google_like_video", 
+                "parameters": [
+                    {
+                        "name": "Video ID",
+                        "description": "ID of the video",
+                        "type": "string",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "name": "Dislike video",
+                "description": "Dislike a youtube video",
+                "handler": "reaction_google_dislike_video",
+                "parameters": [
+                    {
+                        "name": "Video ID",
+                        "description": "Id of the video",
+                        "type": "string",
+                        "required": true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Github",
+        "description": "Github API",
+        "actions": [
+            {
+                "name": "New commit",
+                "description": "A new commit",
+                "handler": "action_github_new_commit", 
+                "parameters": [
+                    {
+                        "name": "Repository name",
+                        "description": "Name of the reposotory",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "results": [
+                    {
+                        "name": "Sha",
+                        "description": "Sha of the commit",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Commit",
+                        "description": "Commit message",
+                        "type": "string"
+                    },
+                    {
+                        "name": "From",
+                        "description": "Author of the commit",
+                        "type": "string"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Microsoft",
+        "description": "Microsoft API",
+        "actions": [
+            {
+                "name": "New email",
+                "description": "A new email received",
+                "handler": "action_microsoft_mail_received", 
+                "parameters": [
+                ],
+                "results": [
+                    {
+                        "name": "Email",
+                        "description": "Email adress of the sender",
+                        "type": "email"
+                    },
+                    {
+                        "name": "Subject",
+                        "description": "Subject of the mail",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Body",
+                        "description": "Body of the mail",
+                        "type": "string"
+                    }
+                ]
+            }
+        ],
+        "reactions": [
+            {
+                "name": "Todotask",
+                "description": "Create a task",
+                "handler": "reaction_microsoft_create_todotask", 
+                "parameters": [
+                    {
+                        "name": "Taskname",
+                        "description": "Name of the task",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "Tasklist",
+                        "description": "Task list name",
+                        "type": "string",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "name": "Send email",
+                "description": "Send an email",
+                "handler": "reaction_microsoft_send_mail", 
+                "parameters": [
+                    {
+                        "name": "Email",
+                        "description": "Email adress of the receiver",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "Subject",
+                        "description": "Subject of the email",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "Body",
+                        "description": "Body of the email",
+                        "type": "string",
+                        "required": false
+                    }
+                ]
+            },
+            {
+                "name": "Create event",
+                "description": "Create an event",
+                "handler": "reaction_microsoft_create_event", 
+                "parameters": [
+                    {
+                        "name": "Title",
+                        "description": "Title of the event",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "Description",
+                        "description": "Description of the event",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "Location",
+                        "description": "Location of the event",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "name": "Start",
+                        "description": "Start date of the event",
+                        "type": "date",
+                        "required": true
+                    },
+                    {
+                        "name": "Start time",
+                        "description": "Start time date of the event",
+                        "type": "time",
+                        "required": true
+                    },
+                    {
+                        "name": "End",
+                        "description": "End date of the event",
+                        "type": "date",
+                        "required": true
+                    },
+                    {
+                        "name": "End time",
+                        "description": "End time date of the event",
+                        "type": "time",
+                        "required": true
+                    },
+                    {
+                        "name": "Guests",
+                        "description": "People invited. Format : mail:firstname$mail:firstname...",
+                        "type": "string",
+                        "required": false
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Time",
+        "description": "Timer",
+        "actions": [
+            {
+                "name": "Date",
+                "description": "Event",
+                "handler": "test_action_handler_function", 
+                "parameters": [
+                    {
+                        "name": "Date",
+                        "description": "Date",
+                        "type": "date",
+                        "required": true
+                    }
+                ]
+            },
+            {
+                "name": "Time",
+                "description": "Daily event",
+                "handler": "test_action_handler_function", 
+                "parameters": [
+                    {
+                        "name": "Time",
+                        "description": "Time",
+                        "type": "time",
+                        "required": true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Twitch",
+        "description": "Twitch API",
+        "actions": [
+            {
+                "name": "Live started",
+                "description": "Know when someone is on live",
+                "handler": "action_twitch_on_live", 
+                "parameters": [
+                    {
+                        "name": "Channel",
+                        "description": "Name of the channel to look",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "results": [
+                    {
+                        "name": "Name",
+                        "description": "Complete name of the channel",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Game",
+                        "description": "Game played by the channel",
+                        "type": "string"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Reddit",
+        "description": "Reddit API",
+        "actions": [
+            {
+                "name": "New friend post",
+                "description": "Know when your friend create a new post",
+                "handler": "action_reddit_new_post", 
+                "parameters": [
+                    {
+                        "name": "Username",
+                        "description": "Name of your friend",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "results": [
+                    {
+                        "name": "Title",
+                        "description": "Title of the post",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Link",
+                        "description": "Link of the post",
+                        "type": "string"
+                    }
+                ]
+            },
+            {
+                "name": "New subreddit post",
+                "description": "Know when a new post / sub",
+                "handler": "action_reddit_news", 
+                "parameters": [
+                    {
+                        "name": "Subreddit",
+                        "description": "Name of the subreddit",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "results": [
+                    {
+                        "name": "Title",
+                        "description": "Title of the post",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Link",
+                        "description": "Link of the post",
+                        "type": "string"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Weather",
+        "description": "Weather API",
+        "actions": [
+            {
+                "name": "City weather",
+                "description": "Know the weather of the city",
+                "handler": "action_weather_changed", 
+                "parameters": [
+                    {
+                        "name": "City",
+                        "description": "Name of the city",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "results": [
+                    {
+                        "name": "Weather",
+                        "description": "Type of weather",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Degrees",
+                        "description": "Temperature",
+                        "type": "string"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Yes Or No !",
+        "description": "'The description !' Maybe...",
+        "actions": [
+            {
+                "name": "Yes or no ?",
+                "description": "Active when it returns same state as you asked. !! It may return 'maybe' and randomly crash application !! Be safe!",
+                "handler": "action_yes_no", 
+                "parameters": [
+                    {
+                        "name": "Response",
+                        "description": "Yes... or no ? or Maybe ??",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "results": [
+                    {
+                        "name": "Response",
+                        "description": "Yes... or no ? or Maybe ??",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Image",
+                        "description": "GIF saying Yes... or no ? or Maybe ??",
+                        "type": "string"
+                    }
+                ]
+            },
+            {
+                "name": "Yes then no ?",
+                "description": "Active if the last response was different. !! It may return 'maybe' and randomly crash application !! Be safe!",
+                "handler": "action_yes_no_different", 
+                "parameters": [
+                ],
+                "results": [
+                    {
+                        "name": "Response",
+                        "description": "Yes... or no ? or Maybe ??",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Image",
+                        "description": "GIF saying Yes... or no ? or Maybe ??",
+                        "type": "string"
+                    }
+                ]
+            },
+            {
+                "name": "Yes and no ?",
+                "description": "ALWAYS ACTIVE !! It may return 'maybe' and randomly crash application !! Be safe!",
+                "handler": "action_yes_no_always", 
+                "parameters": [
+                ],
+                "results": [
+                    {
+                        "name": "Response",
+                        "description": "Yes... or no ? or Maybe ??",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Image",
+                        "description": "GIF saying Yes... or no ? or Maybe ??",
+                        "type": "string"
+                    }
+                ]
+            }
+        ]
+    }
+]

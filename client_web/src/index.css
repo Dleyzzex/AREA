@@ -1,0 +1,185 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
+  
+  body {
+    background-color: #f6f6f6;
+  }
+
+  .navbar {
+    background-color: #e1e1e1;
+  }
+
+  .ProfilePicture {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 15%;
+  }
+
+  .ProfileInfo {
+    font-size: 25px;
+  }
+  .ProfileInfo td:first-child{
+    width: 2em;
+    word-break: break-all;
+  }
+
+  .dropdown-toggle::after {
+    display:none;
+}
+
+.btn-oauth {
+  border-inline-end: unset;
+  border-inline-start: unset;
+  border-block-end: unset;
+  border-block-start: unset;
+  border-collapse: unset;
+  background: unset;
+  color: black;
+}
+
+.btn-oauth-green {
+  border-inline-end: unset;
+  border-inline-start: unset;
+  border-block-end: unset;
+  border-block-start: unset;
+  border-collapse: unset;
+  background: unset;
+  color: #28a745;
+}
+
+.btn-oauth-green :hover {
+  color: #23963e
+}
+
+.btn-oauth-red {
+  border-inline-end: unset;
+  border-inline-start: unset;
+  border-block-end: unset;
+  border-block-start: unset;
+  border-collapse: unset;
+  background: unset;
+  color: #dc3545;
+}
+
+.btn-oauth-red :hover {
+  color: #d12434;
+}
+
+.btn-google {
+  border-inline-end: unset;
+  border-inline-start: unset;
+  border-block-end: unset;
+  border-block-start: unset;
+  border-collapse: unset;
+  border: unset;
+  background: unset;
+  border-color: unset;
+
+  border: thin solid #c8ccd0;
+  background: white;
+  color: #737373;
+}
+
+.btn-google:hover {
+  border: thin solid #c8ccd0;
+  background-color: #c8ccd0;
+}
+
+
+.btn-github {
+
+  border-inline-end: unset;
+  border-inline-start: unset;
+  border-block-end: unset;
+  border-block-start: unset;
+  border-collapse: unset;
+
+  background: white;
+  color: #737373;
+  border:none;
+  background-color: #2f3337;
+  color: white
+}
+
+.btn-github:hover {
+  background-color: black
+}
+
+.btn-microsoft {
+  border-inline-end: unset;
+  border-inline-start: unset;
+  border-block-end: unset;
+  border-block-start: unset;
+  border-collapse: unset;
+  border: unset;
+  background: unset;
+  border-color: unset;
+
+  border: thin solid #c8ccd0;
+  background: white;
+  color: #737373;
+}
+
+.btn-microsoft:hover {
+  border: thin solid #c8ccd0;
+  background-color: #c8ccd0;
+}
+
+.btn-script {
+  border-inline-end: unset;
+  border-inline-start: unset;
+  border-block-end: unset;
+  border-block-start: unset;
+  border-collapse: unset;
+  border: unset;
+  background: unset;
+  border-color: unset;
+  background-color: none;
+  color: grey;
+}
+
+.btn-script :hover {
+  border-inline-end: unset;
+  border-inline-start: unset;
+  border-block-end: unset;
+  border-block-start: unset;
+  border-collapse: unset;
+  border: unset;
+  background: unset;
+  border-color: unset;
+  background-color: none;
+  color: grey;
+}
+
+.script-title {
+
+}
+
+.script-status {
+  position: relative;
+  top: -20%;
+  left: 0%;
+}
+
+.script-status-running {
+  color: #28a745;
+}
+
+.script-status-stopped {
+  color: #ff9900; 
+}
+.script-status-error {
+  color: #dc3545;
+}

@@ -1,0 +1,886 @@
+openapi: 3.0.0
+info:
+  title: MacArea API documentation
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8081
+    description: Local development server
+
+paths:
+  /status:
+    get:
+      tags:
+      - "Status"
+      summary: Check if API work
+      responses:
+        "200":
+          description: "Check if API work"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Status Ok"
+  /auth/signup:
+    post:
+      tags:
+      - "Auth"
+      summary: Create a new user
+      operationId: register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "User"
+                email:
+                  type: string
+                  example: "john@mail.com"
+                password:
+                  type: string
+                  example: "pass123"
+              required:
+                - username
+                - email
+                - password
+      responses:
+        "200":
+          description: User details, a JWT access token and a refresh token cookie
+          headers:
+            Set-Cookie:
+              description: "`refresh_token`"
+              schema:
+                type: string
+                example: refresh_token=51872eca5efedcf424db4cf5afd16a9d00ad25b743a034c9c221afc85d18dcd5e4ad6e3f08607550; Path=/; Expires=Tue, 16 Jun 2020 09:14:17 GMT; HttpOnly
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/user'
+                  access_token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWIxMmUxOTdlMDZhNzZjY2RlZmMxMjEiLCJpZCI6IjVlYjEyZTE5N2UwNmE3NmNjZGVmYzEyMSIsImlhdCI6MTU4ODc1ODE1N30.xR9H0STbFOpSkuGA9jHNZOJ6eS7umHHqKRhI807YT1Y"
+        "400":
+          description: User already exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User already exist"
+
+  /auth/signin:
+    post:
+      tags:
+      - "Auth"
+      summary: Authenticate user credentials and return a JWT token and a cookie with a refresh token
+      operationId: authenticate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "john@mail.com"
+                password:
+                  type: string
+                  example: "pass123"
+              required:
+                - email
+                - password
+      responses:
+        "200":
+          description: User details, a JWT access token and a refresh token cookie
+          headers:
+            Set-Cookie:
+              description: "`refresh_token`"
+              schema:
+                type: string
+                example: refresh_token=51872eca5efedcf424db4cf5afd16a9d00ad25b743a034c9c221afc85d18dcd5e4ad6e3f08607550; Path=/; Expires=Tue, 16 Jun 2020 09:14:17 GMT; HttpOnly
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/user'
+                  access_token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWIxMmUxOTdlMDZhNzZjY2RlZmMxMjEiLCJpZCI6IjVlYjEyZTE5N2UwNmE3NmNjZGVmYzEyMSIsImlhdCI6MTU4ODc1ODE1N30.xR9H0STbFOpSkuGA9jHNZOJ6eS7umHHqKRhI807YT1Y"
+        "400":
+          description: The email or password is incorrect
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Email or password is incorrect"
+  /auth/{provider}:
+    post:
+      tags:
+      - "Auth"
+      parameters:
+        - in: path
+          name: provider
+          schema:
+            type: string
+            example: "google"
+          required: true
+      summary: Signin or singup with a provider
+      operationId: signinWithProvider
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                authorization_code:
+                  type: string
+                  example: "123456"
+                redirect_uri:
+                  type: string
+                  example: "http://localhost:8080/login"
+                origin:
+                  type: string
+                  enum: ["web", "mobile"]
+                  example: "web"
+              required:
+                - authorization_code
+                - redirect_uri
+                - origin
+      responses:
+        "200":
+          description: User details, a JWT access token and a refresh token cookie
+          headers:
+            Set-Cookie:
+              description: "`refresh_token`"
+              schema:
+                type: string
+                example: refresh_token=51872eca5efedcf424db4cf5afd16a9d00ad25b743a034c9c221afc85d18dcd5e4ad6e3f08607550; Path=/; Expires=Tue, 16 Jun 2020 09:14:17 GMT; HttpOnly
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/user'
+                  access_token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWIxMmUxOTdlMDZhNzZjY2RlZmMxMjEiLCJpZCI6IjVlYjEyZTE5N2UwNmE3NmNjZGVmYzEyMSIsImlhdCI6MTU4ODc1ODE1N30.xR9H0STbFOpSkuGA9jHNZOJ6eS7umHHqKRhI807YT1Y"
+        "400":
+          description: User already exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User already exist"
+  /auth/{provider}/link:
+    post:
+      tags:
+      - "Auth"
+      parameters:
+        - in: path
+          name: provider
+          schema:
+            type: string
+            example: "google"
+          required: true
+      summary: Link a provider account
+      operationId: linkWithProvider
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                authorization_code:
+                  type: string
+                  example: "123456"
+                redirect_uri:
+                  type: string
+                  example: "http://localhost:8080/login"
+                origin:
+                  type: string
+                  enum: ["web", "mobile"]
+                  example: "web"
+              required:
+                - authorization_code
+                - redirect_uri
+                - origin
+      responses:
+        "200":
+          description: Status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        "401":
+          description: User already exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized."
+  /auth/{provider}/unlink:
+    post:
+      tags:
+      - "Auth"
+      parameters:
+        - in: path
+          name: provider
+          schema:
+            type: string
+            example: "google"
+          required: true
+      summary: Link a provider account
+      operationId: unlinkWithProvider
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        "401":
+          description: User already exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized."
+  /auth/refresh-token:
+    post:
+      tags:
+      - "Auth"
+      summary: Use a refresh token to generate a new access token and a new refresh token
+      description: The refresh token is sent and returned via cookies.
+      operationId: refreshToken
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: cookie
+          name: refreshToken
+          description: The `refreshToken` cookie
+          schema:
+            type: string
+            example: 51872eca5efedcf424db4cf5afd16a9d00ad25b743a034c9c221afc85d18dcd5e4ad6e3f08607550
+      responses:
+        "200":
+          description: New access token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWIxMmUxOTdlMDZhNzZjY2RlZmMxMjEiLCJpZCI6IjVlYjEyZTE5N2UwNmE3NmNjZGVmYzEyMSIsImlhdCI6MTU4ODc1ODE1N30.xR9H0STbFOpSkuGA9jHNZOJ6eS7umHHqKRhI807YT1Y"
+        "400":
+          description: The refresh token is invalid, revoked or expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid token"
+  /auth/revoke-token:
+    post:
+      tags:
+      - "Auth"
+      summary: Revoke a refresh token
+      description: Admin users can revoke the tokens of any user, regular users can only revoke their own tokens.
+      operationId: revokeToken
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: cookie
+          name: refreshToken
+          description: The refresh token can be sent in a cookie or the post body, if both are sent the token in the body is used.
+          schema:
+            type: string
+            example: 51872eca5efedcf424db4cf5afd16a9d00ad25b743a034c9c221afc85d18dcd5e4ad6e3f08607550
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  example: "51872eca5efedcf424db4cf5afd16a9d00ad25b743a034c9c221afc85d18dcd5e4ad6e3f08607550"
+      responses:
+        "200":
+          description: The refresh token was successfully revoked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Token revoked"
+        "400":
+          description: The refresh token is invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid token"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+  /services/status:
+    get:
+      tags:
+      - "Services"
+      summary: Get services status
+      operationId: getServicesStatus
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User details, a JWT access token and a refresh token cookie
+          headers:
+            Set-Cookie:
+              description: "`refresh_token`"
+              schema:
+                type: string
+                example: refresh_token=51872eca5efedcf424db4cf5afd16a9d00ad25b743a034c9c221afc85d18dcd5e4ad6e3f08607550; Path=/; Expires=Tue, 16 Jun 2020 09:14:17 GMT; HttpOnly
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  google:
+                    type: boolean
+                    example: true
+                  microsoft:
+                    type: boolean
+                    example: false
+        "401":
+          description: User already exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized."
+  /users:
+    get:
+      tags:
+      - "Users"
+      summary: Get a list of all users
+      description: Restricted to admin users.
+      operationId: getAllUsers
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: cookie
+          name: refreshToken
+          description: The refresh token can be sent in a cookie or the post body, if both are sent the token in the body i used.
+          schema:
+            type: string
+            example: 51872eca5efedcf424db4cf5afd16a9d00ad25b743a034c9c221afc85d18dcd5e4ad6e3f08607550
+      responses:
+        "200":
+          description: An array of all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/user'
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+  /users/me:
+    get:
+      tags:
+      - "Users"
+      summary: Get user information
+      description: Get user information.
+      operationId: getUser
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: cookie
+          name: refreshToken
+          description: The refresh token can be sent in a cookie or the post body, if both are sent the token in the body i used.
+          schema:
+            type: string
+            example: 51872eca5efedcf424db4cf5afd16a9d00ad25b743a034c9c221afc85d18dcd5e4ad6e3f08607550
+      responses:
+        "200":
+          description: User information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+    delete:
+      tags:
+      - "Users"
+      summary: Delete my account
+      description: Delete my account.
+      operationId: deleteUser
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: cookie
+          name: refreshToken
+          description: The refresh token can be sent in a cookie or the post body, if both are sent the token in the body i used.
+          schema:
+            type: string
+            example: 51872eca5efedcf424db4cf5afd16a9d00ad25b743a034c9c221afc85d18dcd5e4ad6e3f08607550
+      responses:
+        "200":
+          description: An array of all users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User successfully deleted"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /users/{id}:
+    parameters:
+      - in: path
+        name: id
+        description: User id
+        required: true
+        example: "5eb12e197e06a76ccdefc121"
+        schema:
+          type: string
+    get:
+      tags:
+      - "Users"
+      summary: Get a single user by id
+      description: Admin users can access any user record, regular users are restricted to their own user record.
+      operationId: getUserById
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: cookie
+          name: refreshToken
+          description: The refresh token can be sent in a cookie or the post body, if both are sent the token in the body i used.
+          schema:
+            type: string
+            example: 51872eca5efedcf424db4cf5afd16a9d00ad25b743a034c9c221afc85d18dcd5e4ad6e3f08607550
+      responses:
+        "200":
+          description: Details of the specified user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+    delete:
+      tags:
+      - "Users"
+      summary: Delete a single user by id
+      description: Admin users can delete any user, regular users are restricted to their own account.
+      operationId: deleteUserId
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: cookie
+          name: refreshToken
+          description: The refresh token can be sent in a cookie or the post body, if both are sent the token in the body is used.
+          schema:
+            type: string
+            example: 51872eca5efedcf424db4cf5afd16a9d00ad25b743a034c9c221afc85d18dcd5e4ad6e3f08607550
+      responses:
+        "200":
+          description: The user was successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User successfully deleted"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        
+  # /users/{id}/refresh-tokens:
+  #   parameters:
+  #     - in: path
+  #       name: id
+  #       description: User id
+  #       required: true
+  #       example: "5eb12e197e06a76ccdefc121"
+  #       schema:
+  #         type: string
+  #   get:
+  #     tags:
+  #     - "Users"
+  #     summary: Get a list of all refresh tokens (active and revoked) of the user with the specified id
+  #     description: Admin users can access any user's refresh tokens, regular users are restricted to their own refresh tokens.
+  #     operationId: getRefreshTokens
+  #     security:
+  #       - bearerAuth: []
+  #     responses:
+  #       "200":
+  #         description: An array of refresh tokens for the specified user id
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 $ref: '#/components/schemas/refresh_token'
+  #       "404":
+  #         $ref: "#/components/responses/NotFoundError"
+  #       "401":
+  #         $ref: "#/components/responses/UnauthorizedError"
+  /users/update_password:
+   put:
+      tags:
+      - "Users"
+      summary: Update a user password
+      description: Admin users can update the password of any user, regular users can only update their own password.
+      operationId: updatePassword
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: cookie
+          name: refreshToken
+          description: The refresh token can be sent in a cookie or the post body, if both are sent the token in the body is used.
+          schema:
+            type: string
+            example: 51872eca5efedcf424db4cf5afd16a9d00ad25b743a034c9c221afc85d18dcd5e4ad6e3f08607550
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: "new password"
+      responses:
+        "200":
+          description: The refresh token was successfully revoked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Password successfully updated"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+  /users/update_email:
+   put:
+      tags:
+      - "Users"
+      summary: Update a user email
+      description: Admin users can update the email of any user, regular users can only update their own email.
+      operationId: updateEmail
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: cookie
+          name: refreshToken
+          description: The refresh token can be sent in a cookie or the post body, if both are sent the token in the body is used.
+          schema:
+            type: string
+            example: 51872eca5efedcf424db4cf5afd16a9d00ad25b743a034c9c221afc85d18dcd5e4ad6e3f08607550
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: "new password"
+      responses:
+        "200":
+          description: The email was successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Email successfully updated"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+  /scripts/create:
+   post:
+      tags:
+      - "Scripts"
+      summary: Create a new script
+      description: Create a new script.
+      operationId: createScript
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: cookie
+          name: refreshToken
+          description: The refresh token can be sent in a cookie or the post body, if both are sent the token in the body is used.
+          schema:
+            type: string
+            example: 51872eca5efedcf424db4cf5afd16a9d00ad25b743a034c9c221afc85d18dcd5e4ad6e3f08607550
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action_id:
+                  type: string
+                  example: "6040dac6678002004a1bafdd"
+                reaction_id:
+                  type: string
+                  example: "6040dac6678002004a1bafe1"
+                action_parameters:
+                  type: array
+                  items:
+                    type: string
+                    example: "john@mail.com"
+                reaction_parameters:
+                  type: array
+                  items:
+                    type: string
+                    example: "message"
+                trigger:
+                  type: number
+                  example: 10
+      responses:
+        "200":
+          description: The email was successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Email successfully updated"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+  /scripts:
+   get:
+      tags:
+      - "Scripts"
+      summary: Get scripts
+      description: Cet all user scripts.
+      operationId: getAllScrpits
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: cookie
+          name: refreshToken
+          description: The refresh token can be sent in a cookie or the post body, if both are sent the token in the body is used.
+          schema:
+            type: string
+            example: 51872eca5efedcf424db4cf5afd16a9d00ad25b743a034c9c221afc85d18dcd5e4ad6e3f08607550
+      responses:
+        "200":
+          description: The email was successfully updated
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/script"
+  /scripts/{id}/update:
+   post:
+      tags:
+      - "Scripts"
+      summary: Update scripts status
+      description: Update a script status
+      operationId: updateScrpits
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: cookie
+          name: refreshToken
+          description: The refresh token can be sent in a cookie or the post body, if both are sent the token in the body is used.
+          schema:
+            type: string
+            example: 51872eca5efedcf424db4cf5afd16a9d00ad25b743a034c9c221afc85d18dcd5e4ad6e3f08607550
+        - in: path
+          name: id
+          description: User id
+          required: true
+          example: "5eb12e197e06a76ccdefc121"
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "start"
+      responses:
+        "200":
+          description: The email was successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+components:
+  schemas:
+    script:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "60437c3e5222f70070749d3a"
+        action:
+          type: object
+          properties:
+            name:
+              type: string
+              example: "mail"
+            description:
+              type: string
+              example: "New mail received"
+        reaction:
+          type: object
+          properties:
+            name:
+              type: string
+              example: "mail"
+            description:
+              type: string
+              example: "Send a mail"
+        trigger:
+          type: number
+          example: 10
+    user:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "5eb12e197e06a76ccdefc121"
+        email:
+          type: string
+          example: "john@mail.com"
+        username:
+          type: string
+          example: "User"
+        role:
+          type: string
+          example: "User"       
+
+    refresh_token:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "79ea9a5e825da7c27d30839c89295071842f2a44b22e917aaf795126f4486509d8511c6fdedb6f1e"
+        expires:
+          type: string
+          example: "2020-06-24T03:29:13.871Z"
+        created:
+          type: string
+          example: "2020-06-17T03:29:13.871Z"
+        createdByIp:
+          type: string
+          example: "127.0.0.1"
+        isExpired:
+          type: boolean
+          example: false
+        isActive:
+          type: boolean
+          example: true
+        revoked:
+          type: string
+          example: "2020-06-17T03:29:13.871Z"
+        revokedByIp:
+          type: string
+          example: "127.0.0.1"                    
+        replacedByToken:
+          type: string
+          example: "a01d3818db64961742f249beeded65739e9c3d1019570ea48ea820d274eac607043a6cbefd23c297"        
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid, or the user does not have access to perform the action
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Unauthorized"
+    NotFoundError:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Not Found"

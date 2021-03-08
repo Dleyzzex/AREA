@@ -1,0 +1,101 @@
+version: "3"
+
+services:
+  server:
+    container_name: "api_server"
+    build: ./server/
+    container_name: server
+    restart: always
+    ports:
+        - "8080:8080"
+    networks:
+      - back
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    env_file:
+      - config.env
+ 
+  client_mobile:
+    container_name: client_mobile
+    build: ./client_mobile/
+    volumes:
+      - apk:/var/lib/apk
+    #restart: always
+
+  web_app:
+    #image: web_app
+    #container_name: "web_app"
+    container_name: client_web
+    build: ./client_web/
+    restart: always
+    ports:
+        - "8081:3000"
+    networks:
+      - back
+    volumes:
+      - ./client_web:/app
+      - /app/node_modules
+      - apk:/var/lib/apk
+      #path app
+    env_file:
+      - config.env
+    depends_on:
+      - client_mobile
+
+  api_database:
+    image: mongo
+    container_name: "api_database"
+    volumes: 
+      - ./api-db-volume:/data/db/
+    ports: 
+      - "127.0.0.1:27017:27017"
+    networks:
+      - back
+    restart: always
+
+  database:
+    image: mongo-express
+    ports:
+      - "5000:8081"
+    env_file:
+      - config.env
+    environment:
+      ME_CONFIG_MONGODB_SERVER: api_database
+      ME_CONFIG_MONGODB_URL: mongodb://api_database:27017
+    networks:
+      - back
+    logging:
+      driver: none
+  
+networks: 
+  back:
+    driver: bridge
+
+volumes:
+  apk:
+
+    # client_web:
+  #   build: ./client_web/
+  #   container_name: client_web
+  #   restart: always
+  #   ports:
+  #       - "8081:80"
+  #   env_file: 
+  #       - ./configdb.env
+  #   depends_on:
+  #       - client_mobile
+  #       - server
+
+  # db:
+  #   image: postgres
+  #   container_name: db
+  #   restart: always
+  #   volumes:
+  #       - "./schema.sql:/docker-entrypoint-initdb.d/schema.sql"
+  #       - "client-data:/var/lib/client/data"
+  #   env_file:
+  #       - ./configdb.env
+  #   networks:
+  #       - back-tier
+  #       - result-tier
