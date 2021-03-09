@@ -17,3 +17,4 @@ Android client : `localhost:8081/client.apk`
   
   
 API documentation : `localhost:8080/doc/`
+MongoDB : `localhost:5000`  
