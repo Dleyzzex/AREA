@@ -1,4 +1,7 @@
 # MacArea
+
+Third year project at Epitech.  
+
 ## Installation
 
 Using docker :
